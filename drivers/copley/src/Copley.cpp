@@ -207,8 +207,6 @@ bool Copley::connect(void)
 			write_set(CopleyParameter::kDriveLatchingFaultStatus, 0xFFFFFFFF);
 			write_set(CopleyParameter::kDriveLatchedEventStatus, 0xFFFFFFFF);
 
-			write_set(CopleyParameter::kDriveMode, static_cast<CopleyParameter::value_t>(DriveMode::kPosition),
-					  CopleyParameter::MemoryLocation::kBoth);
 			write_configuration();
 
 			// reset amplifier and update the motor status.
@@ -2128,11 +2126,13 @@ void Copley::write_hardware_specification(void)
 
 		// Write a default function to all input pins. User is responsible for writing all input functions.
 		for (uint8_t pin = 0; pin < _hardware.amplifier.num_inputs; ++pin)
-			write_input_pin_config(pin, CopleyHardwareSpecification::InputPin::kNoFunction);
+			write_input_pin_config(pin, CopleyHardwareSpecification::InputPin::kNoFunction, false,
+				CopleyParameter::MemoryLocation::kBoth);
 
 		// Write a default function to all output pins. User is response for writing all output functions.
 		for (uint8_t pin = 0; pin < _hardware.amplifier.num_outputs; ++pin)
-			write_output_pin_config(pin, CopleyHardwareSpecification::OutputPin::kTrackEventStatus);
+			write_output_pin_config(pin, CopleyHardwareSpecification::OutputPin::kTrackEventStatus,
+				CopleyParameter::MemoryLocation::kBoth);
 	}
 }
 
